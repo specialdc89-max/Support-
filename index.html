@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skrill - Help Center & Dispute Resolution</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+    <!-- Firebase App & Firestore SDKs (Compat versions for global usage) -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+    <style>
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+        .typing-dot-1 { animation: bounce 1.2s infinite ease-in-out 0s; }
+        .typing-dot-2 { animation: bounce 1.2s infinite ease-in-out 0.2s; }
+        .typing-dot-3 { animation: bounce 1.2s infinite ease-in-out 0.4s; }
+    </style>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#8a0099', 
+                        secondary: '#f0f4ff', 
+                        darkblue: '#8a0099'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-secondary text-slate-800 font-sans min-h-screen flex flex-col relative">
+
+    <!-- HEADER -->
+    <header class="bg-[#8a0099] text-white shadow-md sticky top-0 z-30">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2.5">
+                <div id="brand-logo-container" class="w-9 h-9 rounded-lg flex items-center justify-center overflow-hidden border border-white/20">
+                    <img src="https://i.ibb.co/1GJnZHyn/IMG-9457.png" alt="Skrill logo" class="w-full h-full object-cover">
+                </div>
+                <div>
+                    <span id="brand-name-text" class="text-xl font-bold tracking-tight text-white">Skrill</span>
+                    <p class="text-[10px] text-blue-200 uppercase tracking-wider font-medium">Help Center</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-3">
+                <div class="hidden sm:flex items-center space-x-1.5 text-xs bg-blue-900/50 px-2.5 py-1 rounded-full border border-blue-400/30">
+                    <span id="header-admin-dot" class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span id="header-admin-status" class="font-medium text-blue-100">Support Online</span>
+                </div>
+                <button onclick="promptAdminAccess()" class="text-xs bg-white/10 hover:bg-white/20 text-white px-2.5 py-1.5 rounded font-mono transition border border-white/20" title="Secret Admin Entry">
+                    🔒 V3.2
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="flex-grow max-w-4xl w-full mx-auto p-4 flex flex-col">
+
+        <!-- VIEW 1: LANDING -->
+        <div id="help-center-home" class="space-y-6 my-auto">
+            <div class="bg-gradient-to-b from-blue-50 to-white rounded-2xl border border-blue-100 p-6 md:p-10 text-center shadow-sm">
+                <span class="text-xs font-bold text-primary uppercase tracking-widest bg-blue-100 px-3 py-1 rounded-full">Customer Assistance</span>
+                <h1 class="text-3xl md:text-5xl font-bold text-slate-900 mt-3 tracking-tight">How Can We Help You?</h1>
+                <p class="text-sm md:text-base text-slate-600 max-w-xl mx-auto mt-2">
+                    Plain-language guides for common payment, account and security questions — plus a direct route to official support when you need it.
+                </p>
+                <div class="mt-6 max-w-lg mx-auto relative">
+                    <span class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">🔍</span>
+                    <input type="text" placeholder='Search help articles, e.g. "pending dispute", "refund"' 
+                        class="w-full pl-11 pr-4 py-3 bg-white border border-slate-300 rounded-full shadow-sm text-sm focus:ring-2 focus:ring-primary focus:outline-none">
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm space-y-4">
+                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Common Issues Resolved with Past Users</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div onclick="selectIssueTopic('Payment Pending or Delayed')" class="p-3.5 rounded-lg border border-slate-100 bg-slate-50 hover:bg-blue-50 hover:border-blue-200 cursor-pointer transition">
+                        <h3 class="font-semibold text-sm text-slate-800">💳 Payment Failed ⚠️ or Delayed</h3>
+                        <p class="text-xs text-slate-500 mt-1">Steps to verify transaction hashes and release held funds securely.</p>
+                    </div>
+                    <div onclick="selectIssueTopic('Account Lock & Verification')" class="p-3.5 rounded-lg border border-slate-100 bg-slate-50 hover:bg-blue-50 hover:border-blue-200 cursor-pointer transition">
+                        <h3 class="font-semibold text-sm text-slate-800">🔐 Account Lock & Verification</h3>
+                        <p class="text-xs text-slate-500 mt-1">How to submit identity documents and restore full access safely.</p>
+                    </div>
+                    <div onclick="selectIssueTopic('Disputed Transfer Resolution')" class="p-3.5 rounded-lg border border-slate-100 bg-slate-50 hover:bg-blue-50 hover:border-blue-200 cursor-pointer transition">
+                        <h3 class="font-semibold text-sm text-slate-800">⚖️ Disputed Transfer Resolution</h3>
+                        <p class="text-xs text-slate-500 mt-1">Initiating mediation between parties and verifying voucher codes.</p>
+                    </div>
+                    <div onclick="selectIssueTopic('Voucher / Crypto Code Check')" class="p-3.5 rounded-lg border border-slate-100 bg-slate-50 hover:bg-blue-50 hover:border-blue-200 cursor-pointer transition">
+                        <h3 class="font-semibold text-sm text-slate-800">⚡ Voucher & Bitcoin Address Validation</h3>
+                        <p class="text-xs text-slate-500 mt-1">Checking BC address validity and validating card PIN numbers.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+                <!-- VIEW 2: USER NAME MODAL -->
+        <div id="name-modal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 flex items-center justify-center p-4">
+            <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8 max-w-md w-full border border-blue-100 animate-in fade-in zoom-in duration-200">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-bold text-slate-900">Start Dispute Support Chat</h2>
+                    <button onclick="closeNameModal()" class="text-slate-400 hover:text-slate-600 font-bold text-lg">&times;</button>
+                </div>
+                <p class="text-xs text-slate-500 mb-4">Please input your name so our support agent knows who is texting.</p>
+                
+                <form id="user-form" onsubmit="startChat(event); return false;" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Your Full Name</label>
+                        <input type="text" id="username-input" required placeholder="e.g., Sarah Johnson" 
+                            class="w-full px-4 py-2.5 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:outline-none mb-3">
+                        
+                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Your Email Address (Unique ID)</label>
+                        <input type="email" id="useremail-input" required placeholder="e.g., sarah@example.com" 
+                            class="w-full px-4 py-2.5 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:outline-none">
+                    </div>
+                    <button type="submit" class="w-full bg-primary hover:bg-darkblue text-white font-semibold py-2.5 rounded-lg transition shadow text-sm">
+        Connect with Live Agent
+    </button>
+</form>
+
+                <div class="mt-4 pt-4 border-t border-slate-100 text-center">
+                    <p class="text-xs text-slate-500 mb-2">Already filed a complaint? Resume your chat:</p>
+                    <button type="button" onclick="resumeExistingChat()" class="text-xs text-primary font-semibold hover:underline">
+                        Lookup Existing Chat by Email 🔍
+                    </button>
+                </div>
+            </div>
+        </div>
+
+               <!-- VIEW 3: LIVE CHAT INTERFACE -->
+        <div id="chat-interface" class="hidden bg-white rounded-xl shadow-lg border border-blue-100 flex flex-col h-[78vh] max-w-2xl mx-auto w-full overflow-hidden my-auto">
+            <div class="bg-primary text-white p-4 flex justify-between items-center">
+                <div>
+                    <h2 class="font-bold text-base">Skrill Dispute Support</h2>
+                    <div class="flex items-center space-x-2 mt-0.5">
+                        <p class="text-xs text-blue-100">Client: <span id="active-user-name" class="font-semibold underline"></span></p>
+                        <span class="text-xs px-2 py-0.2 bg-black/20 rounded-full flex items-center space-x-1">
+                            <span id="chat-agent-dot" class="w-2 h-2 rounded-full bg-emerald-400 inline-block"></span>
+                            <span id="chat-agent-status-text" class="text-[10px] text-blue-100 font-medium">Online</span>
+                        </span>
+                    </div>
+                </div>
+                <button onclick="endChat()" class="text-xs bg-red-500 hover:bg-red-600 px-3 py-1.5 rounded font-medium transition">Leave Chat</button>
+            </div>
+
+            <div id="chat-messages" class="flex-grow p-4 overflow-y-auto space-y-3 bg-slate-50"></div>
+
+            <form id="chat-form" onsubmit="sendUserMessage(event)" class="p-3 bg-white border-t border-slate-200 flex gap-2">
+                <input type="text" id="chat-input" placeholder="Type your dispute message here..." autocomplete="off"
+                    class="flex-grow px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:outline-none text-sm">
+                <button type="submit" class="bg-primary hover:bg-darkblue text-white px-5 py-2 rounded-lg font-medium text-sm transition">
+                    Send
+                </button>
+            </form>
+        </div>
+
+        <!-- VIEW 4: SECRET ADMIN PANEL -->
+        <div id="admin-panel" class="hidden bg-white rounded-xl shadow-2xl border border-slate-300 max-w-3xl mx-auto w-full overflow-hidden my-4">
+            <div class="bg-slate-900 text-white p-4 flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <span class="text-xs bg-emerald-500 text-slate-950 font-bold px-2 py-0.5 rounded">SECURE ADMIN</span>
+                    <h2 class="font-bold text-base">Skrill Management Console</h2>
+                </div>
+                <button onclick="closeAdminPanel()" class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded">Lock Panel</button>
+            </div>
+
+            <div class="flex border-b border-slate-200 bg-slate-100 text-xs sm:text-sm font-semibold">
+                <button onclick="switchAdminTab('chats')" id="tab-btn-chats" class="flex-1 py-3 px-2 text-center text-primary border-b-2 border-primary bg-white">Customer Support Chats</button>
+                <button onclick="switchAdminTab('invoices')" id="tab-btn-invoices" class="flex-1 py-3 px-2 text-center text-slate-600 hover:text-slate-900">Send Invoice Email</button>
+                <button onclick="switchAdminTab('settings')" id="tab-btn-settings" class="flex-1 py-3 px-2 text-center text-slate-600 hover:text-slate-900">Admin Settings & Logo</button>
+            </div>
+
+            <div id="admin-tab-chats" class="p-4 space-y-4">
+                <div class="flex justify-between items-center">
+                    <h3 class="font-semibold text-xs uppercase tracking-wider text-slate-500">Active Customer Tickets</h3>
+                    <button onclick="loadChatsFromCloud(); renderAdminChatsList();" class="text-xs bg-slate-200 hover:bg-slate-300 px-2.5 py-1 rounded">🔄 Refresh List</button>
+                </div>
+                <div id="admin-customers-list" class="space-y-3">
+                    <p class="text-sm text-slate-400 italic">No customer chats active right now.</p>
+                </div>
+            </div>
+
+            <div id="admin-tab-invoices" class="hidden p-6 space-y-4">
+                <div class="flex justify-between items-center">
+                    <h3 class="font-bold text-md text-slate-800">Dispatch Payment Invoice</h3>
+                    <span class="text-xs bg-amber-100 text-amber-800 px-2.5 py-1 rounded font-medium">EmailJS Enabled</span>
+                </div>
+                <form id="invoice-form" onsubmit="sendInvoiceEmail(event)" class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Recipient Email</label>
+                            <input type="email" id="inv-email" required placeholder="client@example.com" class="w-full p-2.5 border border-slate-300 rounded text-sm focus:ring-2 focus:ring-primary focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Agent Phone Number (WhatsApp)</label>
+                            <input type="text" id="inv-agent-phone" required placeholder="+1 (800) 555-SKR" class="w-full p-2.5 border border-slate-300 rounded text-sm focus:ring-2 focus:ring-primary focus:outline-none">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Amount Sent</label>
+                            <input type="text" id="inv-amount" required placeholder="$150.00" class="w-full p-2.5 border border-slate-300 rounded text-sm focus:ring-2 focus:ring-primary focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Transaction Fee</label>
+                            <input type="text" id="inv-fee" required placeholder="$5.00" class="w-full p-2.5 border border-slate-300 rounded text-sm focus:ring-2 focus:ring-primary focus:outline-none">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Payment Method: Bitcoin (BC Address)</label>
+                        <input type="text" id="inv-bc" placeholder="bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh" class="w-full p-2.5 border border-slate-300 rounded text-sm font-mono text-xs focus:ring-2 focus:ring-primary focus:outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Alternative Payment: Voucher Card Number</label>
+                        <input type="text" id="inv-voucher" placeholder="Voucher PIN / Code (Optional)" class="w-full p-2.5 border border-slate-300 rounded text-sm focus:ring-2 focus:ring-primary focus:outline-none">
+                    </div>
+
+                    <button type="submit" id="invoice-submit-btn" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 rounded text-sm transition shadow">
+                        Send Invoice via EmailJS
+                    </button>
+                    <div id="invoice-status-msg" class="hidden text-xs font-semibold text-center mt-2"></div>
+                </form>
+            </div>
+
+            <div id="admin-tab-settings" class="hidden p-6 space-y-4">
+                <h3 class="font-bold text-md text-slate-800">Admin Profile & Brand Configuration</h3>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Admin Active Status</label>
+                        <select id="admin-status-select" onchange="updateAdminStatusSetting(this.value)" class="w-full p-2.5 border border-slate-300 rounded text-sm">
+                            <option value="online">Online & Available</option>
+                            <option value="away">Away</option>
+                            <option value="offline">Offline</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Online Support Phone Number</label>
+                        <input type="text" id="support-phone-input" oninput="updateSupportPhone(this.value)" class="w-full p-2.5 border border-slate-300 rounded text-sm">
+                    </div>
+                    <button onclick="saveAdminSettings()" class="w-full bg-primary hover:bg-darkblue text-white font-semibold py-2 rounded text-sm transition">
+                        Save Changes to Storage
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FLOATING CHAT BUTTON -->
+    <div class="fixed bottom-6 right-6 z-30">
+        <button onclick="openNameModal()" class="bg-emerald-600 hover:bg-emerald-500 text-white p-4 rounded-full shadow-2xl flex items-center justify-center transition hover:scale-105 group border-2 border-white">
+            <span class="text-2xl">💬</span>
+            <span class="max-w-0 overflow-hidden whitespace-nowrap group-hover:max-w-xs transition-all duration-300 ease-in-out font-bold text-sm pl-0 group-hover:pl-2">
+                Support Chat
+            </span>
+        </button>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-[#8a0099] text-white border-t border-blue-900 py-4 mt-auto text-center text-xs">
+        &copy; 2026 Skrill. All rights reserved. Secure Dispute Resolution Portal. Support Line: <span id="display-support-phone" class="font-semibold text-blue-100">+1 (800) 555-SKR</span>
+    </footer>
+
+    <!-- JAVASCRIPT & FIREBASE CLOUD SYNC -->
+    <script>
+        // --- FIREBASE CONFIGURATION & INITIALIZATION ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyD-WffQEVsPTtkQoCOItGpUNXqGSKV5GQw",
+            authDomain: "support-63294.firebaseapp.com",
+            projectId: "support-63294",
+            storageBucket: "support-63294.firebasestorage.app",
+            messagingSenderId: "1021411350067",
+            appId: "1:1021411350067:web:3b415cd475b425d8efb546",
+            measurementId: "G-52C01GNP35"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // --- EMAILJS CONFIGURATION ---
+        const EMAILJS_PUBLIC_KEY = "YtIeLpthtjEnMtCzQ"; 
+        const EMAILJS_SERVICE_ID = "service_fxcuc7n";
+        const EMAILJS_TEMPLATE_ID = "template_zquvjli";
+        (function(){ emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY }); })();
+
+        // --- APP STATE ---
+        let savedSettings = JSON.parse(localStorage.getItem('Skrill_admin_settings')) || {
+            adminStatus: 'online',
+            supportPhone: '+1 (800) 555-SKR',
+            logoUrl: ''
+        };
+
+        let currentUser = { name: '', email: '', messages: [] };
+        let appState = {
+            adminStatus: savedSettings.adminStatus,
+            supportPhone: savedSettings.supportPhone,
+            activeCustomerChats: []
+        };
+
+        // --- Keep only ONE real-time listener ---
+let chatsUnsubscribe = null;
+
+function loadChatsFromCloud() {
+    // Prevent multiple listeners
+    if (chatsUnsubscribe) {
+        chatsUnsubscribe();
+    }
+
+    chatsUnsubscribe = db.collection("dispute_chats").onSnapshot((snapshot) => {
+        appState.activeCustomerChats = [];
+        snapshot.forEach((doc) => {
+            const data = doc.data();
+            // Guarantee messages is always an array
+            if (!Array.isArray(data.messages)) data.messages = [];
+            appState.activeCustomerChats.push(data);
+        });
+
+        if (!document.getElementById('admin-panel').classList.contains('hidden')) {
+            renderAdminChatsList();
+        }
+        if (currentUser.email) {
+            renderChatMessages();
+        }
+    }, (error) => {
+        console.error("Firestore listener error:", error);
+    });
+}
+
+// Call this only once (already done in DOMContentLoaded)
+window.addEventListener('DOMContentLoaded', () => {
+    loadChatsFromCloud();
+            document.getElementById('admin-status-select').value = appState.adminStatus;
+            document.getElementById('support-phone-input').value = appState.supportPhone;
+            document.getElementById('display-support-phone').innerText = appState.supportPhone;
+            updateAdminStatusSetting(appState.adminStatus);
+        });
+
+        function saveAdminSettings() {
+            localStorage.setItem('Skrill_admin_settings', JSON.stringify({
+                adminStatus: appState.adminStatus,
+                supportPhone: appState.supportPhone
+            }));
+            alert("Settings successfully saved to browser storage!");
+        }
+
+        function openNameModal() {
+            document.getElementById('name-modal').classList.remove('hidden');
+            document.getElementById('username-input').focus();
+        }
+
+        function closeNameModal() {
+            document.getElementById('name-modal').classList.add('hidden');
+        }
+
+        function selectIssueTopic(topic) {
+            openNameModal();
+            setTimeout(() => {
+                const input = document.getElementById('username-input');
+                if(input && !input.value) {
+                    input.placeholder = `Your Name (Inquiry: ${topic})`;
+                }
+            }, 100);
+        }
+
+        function promptAdminAccess() {
+            const code = prompt("Enter Secret Admin Passcode:");
+            if (code === "080333") {
+                document.getElementById('admin-panel').classList.remove('hidden');
+                document.getElementById('admin-panel').scrollIntoView({ behavior: 'smooth' });
+                loadChatsFromCloud();
+                renderAdminChatsList();
+            } else if (code !== null) {
+                alert("Incorrect passcode.");
+            }
+        }
+
+        function closeAdminPanel() {
+            document.getElementById('admin-panel').classList.add('hidden');
+        }
+
+        async function startChat(event) {
+    if (event) event.preventDefault();
+    const nameInput = document.getElementById('username-input').value.trim();
+    const emailInput = document.getElementById('useremail-input').value.trim().toLowerCase();
+    if (!nameInput || !emailInput) return;
+
+    const chatRef = db.collection("dispute_chats").doc(emailInput);
+    const doc = await chatRef.get();
+
+    // Check if a ticket already exists with this email address
+    if (doc.exists) {
+        alert("A support ticket already exists with this email address. Please use the 'Lookup Existing Chat by Email' option to continue your conversation.");
+        return;
+    }
+
+    // Otherwise, create the new ticket normally
+    currentUser.name = nameInput;
+    currentUser.email = emailInput;
+    document.getElementById('active-user-name').innerText = `${currentUser.name} (${currentUser.email})`;
+
+    const newChat = {
+        email: currentUser.email,
+        name: currentUser.name,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        messages: [
+            {
+                sender: 'agent',
+                text: `Hello ${currentUser.name}! Welcome to Skrill support. How can we assist with your dispute today?`,
+                timestamp: Date.now()
+            }
+        ]
+    };
+    await chatRef.set(newChat);
+
+    closeNameModal();
+    document.getElementById('help-center-home').classList.add('hidden');
+    document.getElementById('chat-interface').classList.remove('hidden');
+    renderChatMessages();
+}
+       async function sendUserMessage(event) {
+    event.preventDefault();
+    const input = document.getElementById('chat-input');
+    const text = input.value.trim();
+    if (!text || !currentUser.email) return;
+
+    const chatRef = db.collection("dispute_chats").doc(currentUser.email);
+
+    // Get the absolute latest document
+    const doc = await chatRef.get();
+    let chat = doc.exists ? doc.data() : {
+        email: currentUser.email,
+        name: currentUser.name,
+        messages: []
+    };
+
+    if (!Array.isArray(chat.messages)) chat.messages = [];
+
+    // Count how many user messages already exist
+    const userMessagesCount = chat.messages.filter(m => m.sender === 'user').length;
+    const isFirstUserMessage = (userMessagesCount === 0);
+
+    // 1. Add the user's message
+    chat.messages.push({
+        sender: 'user',
+        text: text,
+        timestamp: Date.now()
+    });
+
+    // Save immediately
+    await chatRef.set({
+        email: currentUser.email,
+        name: currentUser.name || chat.name,
+        messages: chat.messages,
+        lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+    }, { merge: true });
+
+    input.value = '';
+    // onSnapshot will re-render, but we can force it
+    renderChatMessages();
+
+    // 2. Auto-reply only on the very first user message
+    if (isFirstUserMessage) {
+        // Small delay so it feels natural
+        setTimeout(async () => {
+            try {
+                // Fetch again to be 100 % safe
+                const latestDoc = await chatRef.get();
+                let latest = latestDoc.exists ? latestDoc.data() : chat;
+                if (!Array.isArray(latest.messages)) latest.messages = [];
+
+                // Avoid adding the auto-message twice
+                const alreadyHasAuto = latest.messages.some(m =>
+                    m.sender === 'agent' &&
+                    m.text.includes('We have received your complaint')
+                );
+
+                if (!alreadyHasAuto) {
+                    latest.messages.push({
+                        sender: 'agent',
+                        text: "Thanks. We have received your complaint. We are connecting you now to an online support agent to resolve the issue.",
+                        timestamp: Date.now()
+                    });
+
+                    await chatRef.set({
+                        messages: latest.messages,
+                        lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+                    }, { merge: true });
+                }
+            } catch (err) {
+                console.error("Failed to send auto-reply:", err);
+            }
+        }, 1400);
+    }
+}
+
+        function renderChatMessages() {
+    const container = document.getElementById('chat-messages');
+    let chat = appState.activeCustomerChats.find(c => c.email === currentUser.email);
+    if (!chat) return;
+
+    container.innerHTML = '';
+    chat.messages.forEach(msg => {
+        const div = document.createElement('div');
+        div.className = `flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`;
+        div.innerHTML = `
+            <div class="max-w-[75%] rounded-lg p-3 text-sm ${msg.sender === 'user' ? 'bg-primary text-white rounded-br-none' : 'bg-white border border-slate-200 text-slate-800 rounded-bl-none shadow-sm'}">
+                <p>${escapeHtml(msg.text)}</p>
+            </div>
+        `;
+        container.appendChild(div);
+    });
+
+    // If admin is typing, show live indicator bubble
+    if (chat.adminTyping) {
+        const typingDiv = document.createElement('div');
+        typingDiv.className = 'flex justify-start';
+        typingDiv.innerHTML = `
+            <div class="bg-white border border-slate-200 text-slate-500 rounded-lg p-3 text-sm rounded-bl-none shadow-sm flex items-center space-x-1.5">
+                <span class="text-xs italic mr-1">Support Agent is typing</span>
+                <span class="w-1.5 h-1.5 bg-slate-400 rounded-full typing-dot-1"></span>
+                <span class="w-1.5 h-1.5 bg-slate-400 rounded-full typing-dot-2"></span>
+                <span class="w-1.5 h-1.5 bg-slate-400 rounded-full typing-dot-3"></span>
+            </div>
+        `;
+        container.appendChild(typingDiv);
+    }
+
+    container.scrollTop = container.scrollHeight;
+}
+
+        function endChat() {
+            document.getElementById('chat-interface').classList.add('hidden');
+            document.getElementById('help-center-home').classList.remove('hidden');
+            document.getElementById('username-input').value = '';
+            currentUser = { name: '', email: '', messages: [] };
+        }
+
+        function switchAdminTab(tabName) {
+            ['chats', 'invoices', 'settings'].forEach(t => {
+                document.getElementById(`admin-tab-${t}`).classList.add('hidden');
+                document.getElementById(`tab-btn-${t}`).classList.remove('border-b-2', 'border-primary', 'bg-white', 'text-primary');
+                document.getElementById(`tab-btn-${t}`).classList.add('text-slate-600');
+            });
+            document.getElementById(`admin-tab-${tabName}`).classList.remove('hidden');
+            document.getElementById(`tab-btn-${tabName}`).classList.add('border-b-2', 'border-primary', 'bg-white', 'text-primary');
+            document.getElementById(`tab-btn-${tabName}`).classList.remove('text-slate-600');
+        }
+
+        function renderAdminChatsList() {
+    const container = document.getElementById('admin-customers-list');
+    if (appState.activeCustomerChats.length === 0) {
+        container.innerHTML = `<p class="text-sm text-slate-400 italic">No customer tickets at the moment.</p>`;
+        return;
+    }
+
+    // Preserve whatever input is currently focused so the keyboard doesn't close
+    const activeElementId = document.activeElement ? document.activeElement.id : null;
+    let activeInputValue = '';
+    if (activeElementId && activeElementId.startsWith('admin-reply-')) {
+        activeInputValue = document.activeElement.value;
+    }
+
+    container.innerHTML = '';
+    appState.activeCustomerChats.forEach(chat => {
+        let messagesHtml = chat.messages.map(m => `
+            <div class="text-xs mb-1">
+                <span class="font-bold ${m.sender === 'user' ? 'text-primary' : 'text-slate-700'}">${m.sender === 'user' ? chat.name : 'Agent'}:</span> 
+                <span>${escapeHtml(m.text)}</span>
+            </div>
+        `).join('');
+
+        const safeEmailId = chat.email.replace(/[@.]/g, '_');
+        const card = document.createElement('div');
+        card.className = `p-4 border rounded-lg bg-slate-50 space-y-2 border-slate-200`;
+        card.innerHTML = `
+            <div class="flex justify-between items-center">
+                <div>
+                    <span class="font-bold text-sm text-slate-800">${escapeHtml(chat.name)}</span>
+                    <span class="text-xs text-slate-500 block">${escapeHtml(chat.email || 'No email provided')}</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <span class="text-xs bg-blue-100 text-primary px-2 py-0.5 rounded font-medium">${chat.messages.length} msgs</span>
+                    <button onclick="deleteCustomerChat('${chat.email}')" class="text-xs bg-red-100 text-red-600 hover:bg-red-200 px-2 py-0.5 rounded font-semibold transition">Delete</button>
+                </div>
+            </div>
+            <div class="bg-white p-2.5 rounded border border-slate-200 max-h-32 overflow-y-auto space-y-1">
+                ${messagesHtml}
+            </div>
+            <div class="flex gap-2 pt-1">
+                <input type="text" id="admin-reply-${safeEmailId}" oninput="updateAdminTypingStatus('${chat.email}')" placeholder="Type reply as admin..." class="flex-grow p-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-primary focus:outline-none">
+                <button onclick="sendAdminReply('${chat.email}')" class="bg-primary hover:bg-darkblue text-white px-3 py-1.5 rounded text-xs font-medium">Reply</button>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+
+    // Restore focus and text if the admin was typing
+    if (activeElementId && document.getElementById(activeElementId)) {
+        const inputEl = document.getElementById(activeElementId);
+        inputEl.focus();
+        inputEl.value = activeInputValue;
+    }
+}
+
+        async function sendAdminReply(chatEmail) {
+    const safeEmailId = chatEmail.replace(/[@.]/g, '_');
+    const input = document.getElementById(`admin-reply-${safeEmailId}`);
+    const text = input.value.trim();
+    if (!text) return;
+
+    const chatRef = db.collection("dispute_chats").doc(chatEmail);
+    const doc = await chatRef.get();
+    if (!doc.exists) return;
+
+    const chat = doc.data();
+    if (!Array.isArray(chat.messages)) chat.messages = [];
+
+    chat.messages.push({
+        sender: 'agent',
+        text: text,
+        timestamp: Date.now()
+    });
+
+    await chatRef.set({
+        messages: chat.messages,
+        adminTyping: false,
+        lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+    }, { merge: true });
+
+    input.value = '';
+    // onSnapshot will refresh the admin list
+}
+
+
+        function updateAdminStatusSetting(status) {
+    appState.adminStatus = status;
+    const dot = document.getElementById('header-admin-dot');
+    const label = document.getElementById('header-admin-status');
+    const chatDot = document.getElementById('chat-agent-dot');
+    const chatLabel = document.getElementById('chat-agent-status-text');
+
+    let statusText = 'Online';
+    let dotClass = 'w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse';
+    let chatDotClass = 'w-2 h-2 rounded-full bg-emerald-400 inline-block';
+
+    if (status === 'away') {
+        statusText = 'Away';
+        dotClass = 'w-2.5 h-2.5 rounded-full bg-amber-400';
+        chatDotClass = 'w-2 h-2 rounded-full bg-amber-400 inline-block';
+    } else if (status === 'offline') {
+        statusText = 'Offline';
+        dotClass = 'w-2.5 h-2.5 rounded-full bg-rose-500';
+        chatDotClass = 'w-2 h-2 rounded-full bg-rose-500 inline-block';
+    }
+
+    if (dot) dot.className = dotClass;
+    if (label) label.innerText = `Support ${statusText}`;
+    if (chatDot) chatDot.className = chatDotClass;
+    if (chatLabel) chatLabel.innerText = statusText;
+}
+
+        function updateSupportPhone(phone) {
+            appState.supportPhone = phone;
+            document.getElementById('display-support-phone').innerText = phone;
+        }
+
+        function sendInvoiceEmail(event) {
+            event.preventDefault();
+            const statusMsg = document.getElementById('invoice-status-msg');
+            
+            const templateParams = {
+                to_email: document.getElementById('inv-email').value,
+                agent_phone: document.getElementById('inv-agent-phone').value,
+                amount: document.getElementById('inv-amount').value,
+                fee: document.getElementById('inv-fee').value,
+                bc_address: document.getElementById('inv-bc').value,
+                voucher: document.getElementById('inv-voucher').value || 'N/A'
+            };
+
+            statusMsg.classList.remove('hidden', 'text-rose-600', 'text-emerald-600');
+            statusMsg.classList.add('text-slate-600');
+            statusMsg.innerText = "Sending invoice through EmailJS...";
+
+            emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
+                .then(function(response) {
+                    statusMsg.classList.remove('text-slate-600');
+                    statusMsg.classList.add('text-emerald-600');
+                    statusMsg.innerText = "Invoice successfully sent via EmailJS!";
+                    document.getElementById('invoice-form').reset();
+                }, function(error) {
+                    statusMsg.classList.remove('text-slate-600');
+                    statusMsg.classList.add('text-rose-600');
+                    statusMsg.innerText = "Failed to send email. Check EmailJS configuration.";
+                    console.error("EmailJS Error:", error);
+                });
+        }
+
+        function resumeExistingChat() {
+            const emailQuery = prompt("Enter the email address you used when filing your complaint:");
+            if (!emailQuery) return;
+
+            const existingChat = appState.activeCustomerChats.find(c => c.email.toLowerCase() === emailQuery.trim().toLowerCase());
+
+            if (existingChat) {
+                currentUser.name = existingChat.name;
+                currentUser.email = existingChat.email;
+                document.getElementById('active-user-name').innerText = `${currentUser.name} (${currentUser.email})`;
+                closeNameModal();
+                document.getElementById('help-center-home').classList.add('hidden');
+                document.getElementById('chat-interface').classList.remove('hidden');
+                renderChatMessages();
+            } else {
+                alert("No active dispute found under that email address.");
+            }
+        }
+
+        async function deleteCustomerChat(chatEmail) {
+            if (confirm("Are you sure you want to delete this dispute ticket?")) {
+                await db.collection("dispute_chats").doc(chatEmail).delete();
+                renderAdminChatsList();
+            }
+        }
+
+async function updateAdminTypingStatus(chatEmail) {
+    await db.collection("dispute_chats").doc(chatEmail).set({
+        adminTyping: true
+    }, { merge: true });
+
+    // Automatically clear the typing flag after 3 seconds of inactivity
+    setTimeout(async () => {
+        await db.collection("dispute_chats").doc(chatEmail).set({
+            adminTyping: false
+        }, { merge: true });
+    }, 3000);
+}
+
+        function escapeHtml(text) {
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+    </script>
+</body>
+</html>
