@@ -223,11 +223,6 @@
                         <input type="text" id="inv-bc" placeholder="bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh" class="w-full p-2.5 border border-slate-300 rounded text-sm font-mono text-xs focus:ring-2 focus:ring-primary focus:outline-none">
                     </div>
 
-                    <div>
-                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Alternative Payment: Voucher Card Number</label>
-                        <input type="text" id="inv-voucher" placeholder="Voucher PIN / Code (Optional)" class="w-full p-2.5 border border-slate-300 rounded text-sm focus:ring-2 focus:ring-primary focus:outline-none">
-                    </div>
-
                     <button type="submit" id="invoice-submit-btn" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 rounded text-sm transition shadow">
                         Send Invoice via EmailJS
                     </button>
@@ -293,7 +288,7 @@
         // --- EMAILJS CONFIGURATION ---
         const EMAILJS_PUBLIC_KEY = "YtIeLpthtjEnMtCzQ"; 
         const EMAILJS_SERVICE_ID = "service_fxcuc7n";
-        const EMAILJS_TEMPLATE_ID = "template_zquvjli";
+        const EMAILJS_TEMPLATE_ID = "template_uccmw5q";
         (function(){ emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY }); })();
 
         // --- APP STATE ---
@@ -679,35 +674,34 @@ div.innerHTML = `
         }
 
         function sendInvoiceEmail(event) {
-            event.preventDefault();
-            const statusMsg = document.getElementById('invoice-status-msg');
-            
-            const templateParams = {
-                to_email: document.getElementById('inv-email').value,
-                agent_phone: document.getElementById('inv-agent-phone').value,
-                amount: document.getElementById('inv-amount').value,
-                fee: document.getElementById('inv-fee').value,
-                bc_address: document.getElementById('inv-bc').value,
-                voucher: document.getElementById('inv-voucher').value || 'N/A'
-            };
+    event.preventDefault();
+    const statusMsg = document.getElementById('invoice-status-msg');
 
-            statusMsg.classList.remove('hidden', 'text-rose-600', 'text-emerald-600');
-            statusMsg.classList.add('text-slate-600');
-            statusMsg.innerText = "Sending invoice through EmailJS...";
+    const templateParams = {
+        to_email: document.getElementById('inv-email').value,
+        agent_phone: document.getElementById('inv-agent-phone').value,
+        amount: document.getElementById('inv-amount').value,
+        fee: document.getElementById('inv-fee').value,
+        bc_address: document.getElementById('inv-bc').value
+    };
 
-            emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
-                .then(function(response) {
-                    statusMsg.classList.remove('text-slate-600');
-                    statusMsg.classList.add('text-emerald-600');
-                    statusMsg.innerText = "Invoice successfully sent via EmailJS!";
-                    document.getElementById('invoice-form').reset();
-                }, function(error) {
-                    statusMsg.classList.remove('text-slate-600');
-                    statusMsg.classList.add('text-rose-600');
-                    statusMsg.innerText = "Failed to send email. Check EmailJS configuration.";
-                    console.error("EmailJS Error:", error);
-                });
-        }
+    statusMsg.classList.remove('hidden', 'text-rose-600', 'text-emerald-600');
+    statusMsg.classList.add('text-slate-600');
+    statusMsg.innerText = "Sending invoice through EmailJS...";
+
+    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
+        .then(function(response) {
+            statusMsg.classList.remove('text-slate-600');
+            statusMsg.classList.add('text-emerald-600');
+            statusMsg.innerText = "Invoice successfully sent via EmailJS!";
+            document.getElementById('invoice-form').reset();
+        }, function(error) {
+            statusMsg.classList.remove('text-slate-600');
+            statusMsg.classList.add('text-rose-600');
+            statusMsg.innerText = "Failed to send email. Check EmailJS configuration.";
+            console.error("EmailJS Error:", error);
+        });
+}
 
         function resumeExistingChat() {
             const emailQuery = prompt("Enter the email address you used when filing your complaint:");
