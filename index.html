@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>giualaw - Help Center & Dispute Resolution</title>
+    <title>Skrill - Help Center & Dispute Resolution</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- EmailJS SDK -->
@@ -44,10 +44,10 @@
         <div class="max-w-4xl mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center space-x-2.5">
                 <div id="brand-logo-container" class="w-9 h-9 rounded-lg flex items-center justify-center overflow-hidden border border-white/20">
-                    <img src="https://i.ibb.co/7NxwKsnK/IMG-9457.png" alt="giualaw logo" class="w-full h-full object-cover">
+                    <img src="https://i.ibb.co/7NxwKsnK/IMG-9457.png" alt="Skrill logo" class="w-full h-full object-cover">
                 </div>
                 <div>
-                    <span id="brand-name-text" class="text-xl font-bold tracking-tight text-white">giualaw</span>
+                    <span id="brand-name-text" class="text-xl font-bold tracking-tight text-white">Skrill</span>
                     <p class="text-[10px] text-blue-200 uppercase tracking-wider font-medium">Help Center</p>
                 </div>
             </div>
@@ -141,7 +141,7 @@
         <div id="chat-interface" class="hidden bg-white rounded-xl shadow-lg border border-blue-100 flex flex-col h-[78vh] max-w-2xl mx-auto w-full overflow-hidden my-auto">
             <div class="bg-primary text-white p-4 flex justify-between items-center">
                 <div>
-                    <h2 class="font-bold text-base">giualaw Dispute Support</h2>
+                    <h2 class="font-bold text-base">Skrill Dispute Support</h2>
                     <div class="flex items-center space-x-2 mt-0.5">
                         <p class="text-xs text-blue-100">Client: <span id="active-user-name" class="font-semibold underline"></span></p>
                         <span class="text-xs px-2 py-0.2 bg-black/20 rounded-full flex items-center space-x-1">
@@ -174,7 +174,7 @@
             <div class="bg-slate-900 text-white p-4 flex justify-between items-center">
                 <div class="flex items-center space-x-2">
                     <span class="text-xs bg-emerald-500 text-slate-950 font-bold px-2 py-0.5 rounded">SECURE ADMIN</span>
-                    <h2 class="font-bold text-base">giualaw Management Console</h2>
+                    <h2 class="font-bold text-base">Skrill Management Console</h2>
                 </div>
                 <button onclick="closeAdminPanel()" class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded">Lock Panel</button>
             </div>
@@ -271,7 +271,7 @@
 
     <!-- FOOTER -->
     <footer class="bg-[#8a0099] text-white border-t border-blue-900 py-4 mt-auto text-center text-xs">
-        &copy; 2026 giualaw. All rights reserved. Secure Dispute Resolution Portal. Support Line: <span id="display-support-phone" class="font-semibold text-blue-100">+1 (800) 555-SKR</span>
+        &copy; 2026 Skrill. All rights reserved. Secure Dispute Resolution Portal. Support Line: <span id="display-support-phone" class="font-semibold text-blue-100">+1 (800) 555-SKR</span>
     </footer>
 
     <!-- JAVASCRIPT & FIREBASE CLOUD SYNC -->
@@ -297,7 +297,7 @@
         (function(){ emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY }); })();
 
         // --- APP STATE ---
-        let savedSettings = JSON.parse(localStorage.getItem('giualaw_admin_settings')) || {
+        let savedSettings = JSON.parse(localStorage.getItem('Skrill_admin_settings')) || {
             adminStatus: 'online',
             supportPhone: '+1 (800) 555-SKR',
             logoUrl: ''
@@ -349,7 +349,7 @@ window.addEventListener('DOMContentLoaded', () => {
         });
 
         function saveAdminSettings() {
-            localStorage.setItem('giualaw_admin_settings', JSON.stringify({
+            localStorage.setItem('Skrill_admin_settings', JSON.stringify({
                 adminStatus: appState.adminStatus,
                 supportPhone: appState.supportPhone
             }));
@@ -418,7 +418,7 @@ window.addEventListener('DOMContentLoaded', () => {
         messages: [
             {
                 sender: 'agent',
-                text: `Hello ${currentUser.name}! Welcome to giualaw support. How can we assist with your dispute today?`,
+                text: `Hello ${currentUser.name}! Welcome to Skrill support. How can we assist with your dispute today?`,
                 timestamp: Date.now()
             }
         ]
