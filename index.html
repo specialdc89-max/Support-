@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skrill - Help Center & Dispute Resolution</title>
+    <title>giualaw - Help Center & Dispute Resolution</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- EmailJS SDK -->
@@ -44,10 +44,10 @@
         <div class="max-w-4xl mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center space-x-2.5">
                 <div id="brand-logo-container" class="w-9 h-9 rounded-lg flex items-center justify-center overflow-hidden border border-white/20">
-                    <img src="https://i.ibb.co/7NxwKsnK/IMG-9457.png" alt="Skrill logo" class="w-full h-full object-cover">
+                    <img src="https://i.ibb.co/7NxwKsnK/IMG-9457.png" alt="giualaw logo" class="w-full h-full object-cover">
                 </div>
                 <div>
-                    <span id="brand-name-text" class="text-xl font-bold tracking-tight text-white">Skrill</span>
+                    <span id="brand-name-text" class="text-xl font-bold tracking-tight text-white">giualaw</span>
                     <p class="text-[10px] text-blue-200 uppercase tracking-wider font-medium">Help Center</p>
                 </div>
             </div>
@@ -141,7 +141,7 @@
         <div id="chat-interface" class="hidden bg-white rounded-xl shadow-lg border border-blue-100 flex flex-col h-[78vh] max-w-2xl mx-auto w-full overflow-hidden my-auto">
             <div class="bg-primary text-white p-4 flex justify-between items-center">
                 <div>
-                    <h2 class="font-bold text-base">Skrill Dispute Support</h2>
+                    <h2 class="font-bold text-base">giualaw Dispute Support</h2>
                     <div class="flex items-center space-x-2 mt-0.5">
                         <p class="text-xs text-blue-100">Client: <span id="active-user-name" class="font-semibold underline"></span></p>
                         <span class="text-xs px-2 py-0.2 bg-black/20 rounded-full flex items-center space-x-1">
@@ -155,13 +155,18 @@
 
             <div id="chat-messages" class="flex-grow p-4 overflow-y-auto space-y-3 bg-slate-50"></div>
 
-            <form id="chat-form" onsubmit="sendUserMessage(event)" class="p-3 bg-white border-t border-slate-200 flex gap-2">
-                <input type="text" id="chat-input" placeholder="Type your dispute message here..." autocomplete="off"
-                    class="flex-grow px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:outline-none text-sm">
-                <button type="submit" class="bg-primary hover:bg-darkblue text-white px-5 py-2 rounded-lg font-medium text-sm transition">
-                    Send
-                </button>
-            </form>
+            <form id="chat-form" onsubmit="sendUserMessage(event)" class="flex items-center gap-2 mt-2">
+    <!-- Customer Image Upload Button -->
+    <label class="cursor-pointer p-2 text-slate-500 hover:text-primary transition" title="Send Image">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+        </svg>
+        <input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(event, 'user')">
+    </label>
+
+    <input type="text" id="chat-input" placeholder="Type your dispute message here..." class="flex-1 p-2.5 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:outline-none">
+    <button type="submit" class="bg-primary text-white px-4 py-2.5 rounded-lg text-sm font-semibold">Send</button>
+</form>
         </div>
 
         <!-- VIEW 4: SECRET ADMIN PANEL -->
@@ -169,7 +174,7 @@
             <div class="bg-slate-900 text-white p-4 flex justify-between items-center">
                 <div class="flex items-center space-x-2">
                     <span class="text-xs bg-emerald-500 text-slate-950 font-bold px-2 py-0.5 rounded">SECURE ADMIN</span>
-                    <h2 class="font-bold text-base">Skrill Management Console</h2>
+                    <h2 class="font-bold text-base">giualaw Management Console</h2>
                 </div>
                 <button onclick="closeAdminPanel()" class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded">Lock Panel</button>
             </div>
@@ -266,7 +271,7 @@
 
     <!-- FOOTER -->
     <footer class="bg-[#8a0099] text-white border-t border-blue-900 py-4 mt-auto text-center text-xs">
-        &copy; 2026 Skrill. All rights reserved. Secure Dispute Resolution Portal. Support Line: <span id="display-support-phone" class="font-semibold text-blue-100">+1 (800) 555-SKR</span>
+        &copy; 2026 giualaw. All rights reserved. Secure Dispute Resolution Portal. Support Line: <span id="display-support-phone" class="font-semibold text-blue-100">+1 (800) 555-SKR</span>
     </footer>
 
     <!-- JAVASCRIPT & FIREBASE CLOUD SYNC -->
@@ -292,7 +297,7 @@
         (function(){ emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY }); })();
 
         // --- APP STATE ---
-        let savedSettings = JSON.parse(localStorage.getItem('Skrill_admin_settings')) || {
+        let savedSettings = JSON.parse(localStorage.getItem('giualaw_admin_settings')) || {
             adminStatus: 'online',
             supportPhone: '+1 (800) 555-SKR',
             logoUrl: ''
@@ -344,7 +349,7 @@ window.addEventListener('DOMContentLoaded', () => {
         });
 
         function saveAdminSettings() {
-            localStorage.setItem('Skrill_admin_settings', JSON.stringify({
+            localStorage.setItem('giualaw_admin_settings', JSON.stringify({
                 adminStatus: appState.adminStatus,
                 supportPhone: appState.supportPhone
             }));
@@ -413,7 +418,7 @@ window.addEventListener('DOMContentLoaded', () => {
         messages: [
             {
                 sender: 'agent',
-                text: `Hello ${currentUser.name}! Welcome to Skrill support. How can we assist with your dispute today?`,
+                text: `Hello ${currentUser.name}! Welcome to giualaw support. How can we assist with your dispute today?`,
                 timestamp: Date.now()
             }
         ]
@@ -471,12 +476,19 @@ window.addEventListener('DOMContentLoaded', () => {
     chat.messages.forEach(msg => {
         const div = document.createElement('div');
         div.className = `flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`;
-div.innerHTML = `
-    <div class="max-w-[75%] rounded-lg p-3 text-sm ${msg.sender === 'user' ? 'bg-primary text-white rounded-br-none' : 'bg-white border border-slate-200 text-slate-800 rounded-bl-none shadow-sm'}">
-        <p>${linkify(msg.text)}</p>
-    </div>
-`;
+        
+        let contentHtml = '';
+        if (msg.imageUrl) {
+            contentHtml = `<img src="${msg.imageUrl}" class="rounded-lg max-h-48 max-w-full object-cover cursor-pointer" onclick="window.open('${msg.imageUrl}')" alt="Uploaded Image">`;
+        } else {
+            contentHtml = `<p>${linkify(msg.text, msg.sender)}</p>`;
+        }
 
+        div.innerHTML = `
+            <div class="max-w-[75%] rounded-lg p-3 text-sm ${msg.sender === 'user' ? 'bg-primary text-white rounded-br-none' : 'bg-white border border-slate-200 text-slate-800 rounded-bl-none shadow-sm'}">
+                ${contentHtml}
+            </div>
+        `;
         container.appendChild(div);
     });
 
@@ -532,12 +544,21 @@ div.innerHTML = `
 
     container.innerHTML = '';
     appState.activeCustomerChats.forEach(chat => {
-        let messagesHtml = chat.messages.map(m => `
-    <div class="text-xs mb-1">
-        <span class="font-bold ${m.sender === 'user' ? 'text-primary' : 'text-slate-700'}">${m.sender === 'user' ? chat.name : 'Agent'}:</span> 
-        <span>${linkify(m.text)}</span>
-    </div>
-`).join('');
+        let messagesHtml = chat.messages.map(m => {
+    let contentText = '';
+    if (m.imageUrl) {
+        contentText = `<a href="${m.imageUrl}" target="_blank"><img src="${m.imageUrl}" class="mt-1 rounded max-h-24 max-w-full object-cover border border-slate-200" alt="Attachment"></a>`;
+    } else {
+        contentText = `<span>${linkify(m.text, m.sender)}</span>`;
+    }
+
+    return `
+        <div class="text-xs mb-1">
+            <span class="font-bold ${m.sender === 'user' ? 'text-primary' : 'text-slate-700'}">${m.sender === 'user' ? chat.name : 'Agent'}:</span> 
+            ${contentText}
+        </div>
+    `;
+}).join('');
 
         const safeEmailId = chat.email.replace(/[@.]/g, '_');
         const card = document.createElement('div');
@@ -556,10 +577,18 @@ div.innerHTML = `
             <div class="bg-white p-2.5 rounded border border-slate-200 max-h-32 overflow-y-auto space-y-1">
                 ${messagesHtml}
             </div>
-            <div class="flex gap-2 pt-1">
-                <input type="text" id="admin-reply-${safeEmailId}" oninput="updateAdminTypingStatus('${chat.email}')" placeholder="Type reply as admin..." class="flex-grow p-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-primary focus:outline-none">
-                <button onclick="sendAdminReply('${chat.email}')" class="bg-primary hover:bg-darkblue text-white px-3 py-1.5 rounded text-xs font-medium">Reply</button>
-            </div>
+            
+            <!-- Admin Reply Form with Image Upload -->
+            <form onsubmit="sendAdminMessageFromList(event, '${chat.email}')" class="flex items-center gap-2 pt-1">
+                <label class="cursor-pointer p-1.5 text-slate-500 hover:text-primary transition" title="Send Image">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                    <input type="file" accept="image/*" class="hidden" onchange="handleImageUploadDirect(event, '${chat.email}', 'admin')">
+                </label>
+                <input type="text" id="admin-reply-${safeEmailId}" oninput="updateAdminTypingStatus('${chat.email}')" placeholder="Type reply as admin..." class="flex-grow p-2 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-primary focus:outline-none">
+                <button type="submit" class="bg-primary hover:bg-darkblue text-white px-3 py-2 rounded text-xs font-medium">Reply</button>
+            </form>
         `;
         container.appendChild(card);
     });
@@ -720,6 +749,105 @@ function linkify(text, sender) {
     });
 }
 
+async function sendAdminMessageFromList(event, customerEmail) {
+    event.preventDefault();
+    const safeEmailId = customerEmail.replace(/[@.]/g, '_');
+    const input = document.getElementById(`admin-reply-${safeEmailId}`);
+    const text = input ? input.value.trim() : '';
+    if (!text) return;
+
+    const chatRef = db.collection("dispute_chats").doc(customerEmail);
+    const doc = await chatRef.get();
+    let chat = doc.exists ? doc.data() : { messages: [] };
+    if (!Array.isArray(chat.messages)) chat.messages = [];
+
+    chat.messages.push({
+        sender: 'admin',
+        text: text,
+        timestamp: Date.now()
+    });
+
+    await chatRef.set({
+        email: customerEmail,
+        name: chat.name || 'Client',
+        messages: chat.messages,
+        adminTyping: false,
+        lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+    }, { merge: true });
+
+    input.value = '';
+}
+
+function handleImageUploadDirect(event, customerEmail, sender) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async function(e) {
+        const base64Image = e.target.result;
+        const chatRef = db.collection("dispute_chats").doc(customerEmail);
+        const doc = await chatRef.get();
+        let chat = doc.exists ? doc.data() : { messages: [] };
+        if (!Array.isArray(chat.messages)) chat.messages = [];
+
+        chat.messages.push({
+            sender: sender,
+            text: '',
+            imageUrl: base64Image,
+            timestamp: Date.now()
+        });
+
+        await chatRef.set({
+            email: customerEmail,
+            name: chat.name || 'Client',
+            messages: chat.messages,
+            lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+
+        event.target.value = '';
+    };
+    reader.readAsDataURL(file);
+}
+
+function handleImageUpload(event, sender) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    if (file.size > 2 * 1024 * 1024) {
+        alert("Please select an image smaller than 2MB.");
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = async function(e) {
+        const base64Image = e.target.result;
+        const targetEmail = currentUser.email;
+        
+        if (!targetEmail) return;
+
+        const chatRef = db.collection("dispute_chats").doc(targetEmail);
+        const doc = await chatRef.get();
+        let chat = doc.exists ? doc.data() : { messages: [] };
+        if (!Array.isArray(chat.messages)) chat.messages = [];
+
+        chat.messages.push({
+            sender: sender,
+            text: '',
+            imageUrl: base64Image,
+            timestamp: Date.now()
+        });
+
+        await chatRef.set({
+            email: targetEmail,
+            name: chat.name || currentUser.name || 'Client',
+            messages: chat.messages,
+            lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+
+        event.target.value = '';
+    };
+    reader.readAsDataURL(file);
+}
 
         function escapeHtml(text) {
             return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
