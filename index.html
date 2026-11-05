@@ -443,10 +443,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
     if (!Array.isArray(chat.messages)) chat.messages = [];
 
-    // Count how many user messages already exist
-    const userMessagesCount = chat.messages.filter(m => m.sender === 'user').length;
-    const isFirstUserMessage = (userMessagesCount === 0);
-
     // 1. Add the user's message
     chat.messages.push({
         sender: 'user',
@@ -463,42 +459,7 @@ window.addEventListener('DOMContentLoaded', () => {
     }, { merge: true });
 
     input.value = '';
-    // onSnapshot will re-render, but we can force it
     renderChatMessages();
-
-    // 2. Auto-reply only on the very first user message
-    if (isFirstUserMessage) {
-        // Small delay so it feels natural
-        setTimeout(async () => {
-            try {
-                // Fetch again to be 100 % safe
-                const latestDoc = await chatRef.get();
-                let latest = latestDoc.exists ? latestDoc.data() : chat;
-                if (!Array.isArray(latest.messages)) latest.messages = [];
-
-                // Avoid adding the auto-message twice
-                const alreadyHasAuto = latest.messages.some(m =>
-                    m.sender === 'agent' &&
-                    m.text.includes('We have received your complaint')
-                );
-
-                if (!alreadyHasAuto) {
-                    latest.messages.push({
-                        sender: 'agent',
-                        text: "Thanks. We have received your complaint. We are connecting you now to an online support agent to resolve the issue.",
-                        timestamp: Date.now()
-                    });
-
-                    await chatRef.set({
-                        messages: latest.messages,
-                        lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
-                    }, { merge: true });
-                }
-            } catch (err) {
-                console.error("Failed to send auto-reply:", err);
-            }
-        }, 1400);
-    }
 }
 
         function renderChatMessages() {
